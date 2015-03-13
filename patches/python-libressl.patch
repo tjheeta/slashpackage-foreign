@@ -1,0 +1,68 @@
+$OpenBSD: patch-Modules__ssl_c,v 1.2 2014/07/11 06:59:43 rpointel Exp $
+--- Modules/_ssl.c.orig	Mon Jun 30 04:05:42 2014
++++ Modules/_ssl.c	Wed Jul  9 11:41:16 2014
+@@ -1601,32 +1601,6 @@ Returns 1 if the OpenSSL PRNG has been seeded with eno
+ It is necessary to seed the PRNG with RAND_add() on some platforms before\n\
+ using the ssl() function.");
+ 
+-static PyObject *
+-PySSL_RAND_egd(PyObject *self, PyObject *arg)
+-{
+-    int bytes;
+-
+-    if (!PyString_Check(arg))
+-        return PyErr_Format(PyExc_TypeError,
+-                            "RAND_egd() expected string, found %s",
+-                            Py_TYPE(arg)->tp_name);
+-    bytes = RAND_egd(PyString_AS_STRING(arg));
+-    if (bytes == -1) {
+-        PyErr_SetString(PySSLErrorObject,
+-                        "EGD connection failed or EGD did not return "
+-                        "enough data to seed the PRNG");
+-        return NULL;
+-    }
+-    return PyInt_FromLong(bytes);
+-}
+-
+-PyDoc_STRVAR(PySSL_RAND_egd_doc,
+-"RAND_egd(path) -> bytes\n\
+-\n\
+-Queries the entropy gather daemon (EGD) on the socket named by 'path'.\n\
+-Returns number of bytes read.  Raises SSLError if connection to EGD\n\
+-fails or if it does not provide enough data to seed PRNG.");
+-
+ #endif /* HAVE_OPENSSL_RAND */
+ 
+ 
+@@ -1640,8 +1614,6 @@ static PyMethodDef PySSL_methods[] = {
+ #ifdef HAVE_OPENSSL_RAND
+     {"RAND_add",            PySSL_RAND_add, METH_VARARGS,
+      PySSL_RAND_add_doc},
+-    {"RAND_egd",            PySSL_RAND_egd, METH_O,
+-     PySSL_RAND_egd_doc},
+     {"RAND_status",         (PyCFunction)PySSL_RAND_status, METH_NOARGS,
+      PySSL_RAND_status_doc},
+ #endif
+$OpenBSD: patch-Lib_ssl_py,v 1.1 2014/04/19 13:53:15 espie Exp $
+--- Lib/ssl.py.orig	Sat Apr 19 15:49:44 2014
++++ Lib/ssl.py	Sat Apr 19 15:49:58 2014
+@@ -62,7 +62,7 @@ import _ssl             # if we can't import it, let t
+ from _ssl import OPENSSL_VERSION_NUMBER, OPENSSL_VERSION_INFO, OPENSSL_VERSION
+ from _ssl import SSLError
+ from _ssl import CERT_NONE, CERT_OPTIONAL, CERT_REQUIRED
+-from _ssl import RAND_status, RAND_egd, RAND_add
++from _ssl import RAND_status, RAND_add
+ from _ssl import \
+      SSL_ERROR_ZERO_RETURN, \
+      SSL_ERROR_WANT_READ, \
+$OpenBSD: patch-Lib_socket_py,v 1.1 2014/04/19 14:17:47 espie Exp $
+--- Lib/socket.py.orig	Sat Apr 19 16:07:48 2014
++++ Lib/socket.py	Sat Apr 19 16:07:54 2014
+@@ -67,7 +67,6 @@ else:
+     from _ssl import SSLError as sslerror
+     from _ssl import \
+          RAND_add, \
+-         RAND_egd, \
+          RAND_status, \
+          SSL_ERROR_ZERO_RETURN, \
+          SSL_ERROR_WANT_READ, \
