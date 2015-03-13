@@ -4,7 +4,6 @@ spf_url watch 'http://git-scm.com/download' &&
 #spf_url src   "http://code.google.com/p/git-core/downloads/detail?name=git-${spf_version?}.tar.gz" &&
 spf_url src   "https://www.kernel.org/pub/software/scm/git/git-${spf_version?}.tar.xz" &&
 spf_cc_ cc_args -static &&
-spf_depend perl    &&
 spf_depend zlib    &&
 spf_depend sparse    &&
 spf_depend curl    degree optional &&
@@ -31,6 +30,10 @@ spf_template_gnu_do_before_configure() {
     prj_echo "SPARSE_FLAGS += -I${spf_path_libc?}/include" >> config.mak.in
   else :
   fi
+} &&
+spf_template_gnu_do_make() {
+  perl_path=$(which perl) || ( echo "Need a working perl for git to install" && exit 1 )  &&
+  PERL_PATH=${perl_path?} make 
 } &&
 #spf_tested_version 2.3.2 &&
 spf_tested_version 1.9.5 &&
