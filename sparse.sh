@@ -14,6 +14,7 @@ spf_do_install() {
     LDFLAGS="${spf_args_cc?} ${spf_args_ld?}" &&
   eval '${1+"$@"} '"${spf_args_make?} all install"
 } &&
+# sparse installs a binary - cgcc - looking for /usr/bin/perl - needed for git
 #spf_tested_version 0.5.0 &&
 spf_tested_version 0.4.4 &&
 spf_tested_version 0.4.3 &&
