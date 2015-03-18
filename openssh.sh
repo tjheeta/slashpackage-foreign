@@ -7,7 +7,7 @@ spf_depend zlib &&
 spf_depend musl &&
 #spf_depend xauth degree optional flags none when runtime &&
 spf_cc_ cc_args -static -D_BSD_SOURCE -DMISSING_FD_MASK -DMISSING_NFDBITS &&
-spf_cc default_path /command \
+spf_cc default_path /command:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin \
   'The first line of this file specifies the $PATH value that will be set for
 ssh login sessions.' &&
 spf_data dir etc &&
