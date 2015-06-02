@@ -4,7 +4,6 @@ spf_template_sourceforge_pid 5624 &&
 spf_url home  'http://zlib.net/' &&
 spf_url watch 'http://zlib.net/' &&
 spf_url src   "http://zlib.net/zlib-${spf_version?}.tar.gz" &&
-spf_depend musl &&
 spf_cc_ cpp_args &&
 spf_cc_ cc_args &&
 spf_cc_ ld_args &&

@@ -10,20 +10,28 @@ spf_template_gnu_do_before_install() {
 spf_template_gnu_do_after_install() {
   #sed -i "s%/lib/ld-musl-x86_64.so.1%${spf_path_prefix}/lib/libc.so%" "${spf_path_prefix?}"/lib/musl-gcc.specs 
   cp /tmp/musl-gcc.specs "${spf_path_prefix?}"/lib/musl-gcc.specs 
+  mkdir ${spf_path_prefix}/bin/
   gcc_path=`which gcc`
-  cat <<EOF > /command/gcc-wrapper
+  cat <<EOF > ${spf_path_prefix}/bin/gcc-wrapper
 #!/bin/sh
 REALGCC=${gcc_path}
 exec "\${REALGCC:-gcc}" "\$@" -specs "${spf_path_prefix}/lib/musl-gcc.specs"
 EOF
-  chmod 755 /command/gcc-wrapper
-  cc_path=`which cc`
-  cat <<EOF > /command/cc-wrapper
+  chmod 755 ${spf_path_prefix}/bin/gcc-wrapper
+  cc_path=`which gcc`
+  cat <<EOF > ${spf_path_prefix}/bin/cc-wrapper
 #!/bin/sh
 REALCC=${cc_path}
 exec "\${REALCC:-cc}" "\$@" -specs "${spf_path_prefix}/lib/musl-gcc.specs"
 EOF
-  chmod 755 /command/cc-wrapper
-  ln -sf ${spf_path_prefix}/lib/libc.so /command/ldd 
+  chmod 755 ${spf_path_prefix}/bin/cc-wrapper
+  gxx_path=`which g++`
+  cat <<EOF > ${spf_path_prefix}/bin/g++-wrapper
+#!/bin/sh
+REALGXX=${gxx_path}
+exec "\${REALGXX:-g++}" "\$@" -specs "${spf_path_prefix}/lib/musl-gcc.specs"
+EOF
+  chmod 755 ${spf_path_prefix}/bin/g++-wrapper
+  ln -sf ${spf_path_prefix}/lib/libc.so ${spf_path_prefix}/bin/ldd 
 } &&
 spf_tested_version 1.1.6

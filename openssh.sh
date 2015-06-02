@@ -18,7 +18,7 @@ spf_args configure --with-privsep-user=nobody &&
 spf_args configure --with-privsep-path="${spf_path_prefix?}"/privsep &&
 spf_args configure --with-md5-passwords &&
 spf_args configure --with-shadow &&
-spf_args configure --with-ldflags="${ld_args}" &&
+spf_args configure --with-ldflags="-static" &&
 spf_args configure --without-skey &&
 spf_args configure --with-mantype=man &&
 spf_args configure --disable-strip &&
