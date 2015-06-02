@@ -8,4 +8,5 @@ spf_depend kernel-headers &&
 spf_data dir  ssl/certs &&
 spf_data dir  ssl/private &&
 spf_data file ssl/openssl.cnf &&
+spf_tested_version 2.1.6 &&
 spf_tested_version 2.1.4

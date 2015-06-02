@@ -34,4 +34,5 @@ EOF
   chmod 755 ${spf_path_prefix}/bin/g++-wrapper
   ln -sf ${spf_path_prefix}/lib/libc.so ${spf_path_prefix}/bin/ldd 
 } &&
+spf_tested_version 1.1.9 &&
 spf_tested_version 1.1.6

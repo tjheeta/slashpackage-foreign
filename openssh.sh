@@ -64,4 +64,5 @@ spf_template_gnu_do_after_install() {
   rm -f "${spf_path_prefix?}"/etc/ssh*key*
 } &&
 spf_no_check && ## there are no tests
+spf_tested_version 6.8p1 &&
 spf_tested_version 6.7p1 
